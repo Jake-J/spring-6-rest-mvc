@@ -3,7 +3,6 @@ package guru.springframework.spring6restmvc.controller;
 import guru.springframework.spring6restmvc.model.Customer;
 import guru.springframework.spring6restmvc.services.CustomerService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +17,29 @@ import java.util.UUID;
 public class CustomerController {
 
     private final CustomerService customerService;
+
+    @PatchMapping("{customerId}")
+    public ResponseEntity patchCustomer(@PathVariable UUID customerId, @RequestBody Customer customer) {
+        customerService.patchBeerById(customerId, customer);
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+
+    @DeleteMapping("{customerId}")
+    public ResponseEntity deleteCustomer(@PathVariable(name="customerId") UUID customerId) {
+        customerService.deleteCustomerById(customerId);
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity updateCustomer(@PathVariable(name="id") UUID id, @RequestBody Customer customer) {
+        customerService.updateCustomerById(id, customer);
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+
+    }
 
     @PostMapping
     public ResponseEntity addCustomer(@RequestBody Customer customer) {
@@ -37,6 +59,5 @@ public class CustomerController {
     @RequestMapping(value = "{customerId}", method = RequestMethod.GET)
     public Customer getCustomerByID(@PathVariable(name = "customerId") UUID customerId) {
         return customerService.getCustomerById(customerId);
-
     }
 }
