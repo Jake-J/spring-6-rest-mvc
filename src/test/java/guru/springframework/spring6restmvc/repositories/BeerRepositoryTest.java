@@ -14,6 +14,13 @@ class BeerRepositoryTest {
     BeerRepository beerRepository;
 
     @Test
+    void testBeerBootstrap() {
+
+        assertThat(beerRepository.findAll()).isEqualTo(3);
+
+    }
+
+    @Test
     void testSaveBeer() {
         Beer savedBeer = beerRepository.save(Beer.builder()
                 .beerName("My beer")

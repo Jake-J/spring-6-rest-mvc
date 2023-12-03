@@ -74,29 +74,31 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-complier-plugin</artifactId>
-                <version>3.3.2</version>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version>
                 <configuration>
                     <source>21</source>
                     <target>21</target>
-                    <annotionprocessorPaths>
+                    <annotationProcessorPaths>
                         <path>
-                            <groupId>org.mapStruct</groupId>
+                            <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
-                            <verion>{org.mapstruct.version}</verion>
+                            <version>${org.mapstruct.version}</version>
                         </path>
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <verion>{lombok.version}</verion>
+                            <version>${lombok.version}</version>
                         </path>
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok-mapstruct-binding</artifactId>
-                            <verion>{org.mapstruct.version}</verion>
+                            <version>0.2.0</version>
                         </path>
-                    </annotionprocessorPaths>
-                    <complierArg>Amapstruct.defaultComponentModel=spring</complierArg>
+                    </annotationProcessorPaths>
+                    <compilerArgs>
+                        <compilerArg>-Amapstruct.defaultComponentModel=spring</compilerArg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
         </plugins>
