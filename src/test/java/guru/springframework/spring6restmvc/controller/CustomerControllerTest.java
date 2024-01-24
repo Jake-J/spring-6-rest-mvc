@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -52,6 +53,8 @@ class CustomerControllerTest {
         Map<String, Object> customerMap= new HashMap<>();
         customerMap.put("customerName", "New Name");
 
+        given(customerService.patchCustomerById(any(UUID.class), any(CustomerDTO.class))).willReturn(Optional.of(customer));
+
         mockMvc.perform(
                 patch(CustomerController.CUSTOMER_PATH_ID, customer.getId())
                         .accept(MediaType.APPLICATION_JSON)
@@ -59,7 +62,7 @@ class CustomerControllerTest {
                         .content(objectMapper.writeValueAsString(customerMap)))
                 .andExpect(status().isNoContent());
 
-        verify(customerService).patchBeerById(uuidArgumentCaptor.capture(), customerArgumentCaptor.capture());
+        verify(customerService).patchCustomerById(uuidArgumentCaptor.capture(), customerArgumentCaptor.capture());
 
         assertThat(customer.getId()).isEqualTo(uuidArgumentCaptor.getValue());
         assertThat(customerMap.get("customerName")).isEqualTo(customerArgumentCaptor.getValue().getCustomerName());
@@ -69,6 +72,8 @@ class CustomerControllerTest {
     @Test
     void testDeleteCustomer() throws Exception {
         CustomerDTO customer = new CustomerServiceImpl().getCustomers().get(0);
+
+        given(customerService.deleteCustomerById(customer.getId())).willReturn(true);
 
         mockMvc.perform(
                 delete(CustomerController.CUSTOMER_PATH_ID, customer.getId())
@@ -83,6 +88,9 @@ class CustomerControllerTest {
     @Test
     void testUpdateCustomer() throws Exception {
         CustomerDTO customer = customerServiceImpl.getCustomers().get(0);
+
+
+        given(customerService.updateCustomerById(any(UUID.class), any(CustomerDTO.class))).willReturn(Optional.of(customer));
 
         mockMvc.perform(put(CustomerController.CUSTOMER_PATH_ID, customer.getId())
                 .accept(MediaType.APPLICATION_JSON)
@@ -125,7 +133,7 @@ class CustomerControllerTest {
     @Test
     void getCustomerByID() throws Exception {
         CustomerDTO testCustomer = new CustomerServiceImpl().getCustomers().get(0);
-        given(customerService.getCustomerById(testCustomer.getId())).willReturn(testCustomer);
+        given(customerService.getCustomerById(testCustomer.getId())).willReturn(Optional.of(testCustomer));
 
             mockMvc.perform(
                     get(CustomerController.CUSTOMER_PATH_ID, testCustomer.getId())
